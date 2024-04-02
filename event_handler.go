@@ -6,13 +6,15 @@ type EventHandler struct {
 }
 
 type Order struct {
-	id uint
+	id    uint
+	state string
 }
 
 func (e *EventHandler) NewOrder() {
+	defaultState := ""
 	e.counter++
 
-	newOrder := Order{e.counter}
+	newOrder := Order{e.counter, defaultState}
 
 	e.orders = append(e.orders, newOrder)
 }
@@ -28,6 +30,14 @@ func (e *EventHandler) FindOrder(id uint) *Order {
 	}
 
 	return nil
+}
+
+func (e *EventHandler) UpdateOrder(id uint, newState string) *Order {
+	currentOrder := e.FindOrder(id)
+
+	currentOrder.state = newState
+
+	return currentOrder
 }
 
 func newEventHandler() *EventHandler {
