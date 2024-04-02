@@ -39,6 +39,18 @@ func TestEventHandler(t *testing.T) {
 			t.Errorf("got %v, want %v", got, want)
 		}
 	})
+
+	t.Run("create a new stage", func(t *testing.T) {
+		stageName := "default"
+		eventHandler.NewStage(stageName)
+
+		got := eventHandler.FindStage(stageName)
+		want := &Stage{"default", []Order{}}
+
+		if got.name != want.name {
+			t.Errorf("got %v, want %v", got, want)
+		}
+	})
 }
 
 func createOrders(eventHandler *EventHandler, numberOfOrders int) {
