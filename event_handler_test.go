@@ -17,11 +17,11 @@ func TestEventHandler(t *testing.T) {
 		}
 
 		if stage != expectedStage {
-			t.Errorf("did not add at default stage, got %v, want %v", stage, expectedStage)
+			t.Errorf("did not add order into default stage, got %v, want %v", stage, expectedStage)
 		}
 	})
 
-	t.Run("find an order", func(t *testing.T) {
+	t.Run("find order", func(t *testing.T) {
 		numberOfOrders := 10
 		createOrders(eventHandler, numberOfOrders)
 
@@ -33,14 +33,17 @@ func TestEventHandler(t *testing.T) {
 		}
 	})
 
-	t.Run("update an order", func(t *testing.T) {
+	t.Run("update order", func(t *testing.T) {
 		numberOfOrders := 10
 		createOrders(eventHandler, numberOfOrders)
 
-		got := *eventHandler.UpdateOrder(3, "updated")
+		updatedOrder := eventHandler.UpdateOrder(3, "updated")
+
+		got, _ := eventHandler.FindOrder(updatedOrder.id)
+
 		want := Order{3, "updated"}
 
-		if got != want {
+		if *got != want {
 			t.Errorf("got %v, want %v", got, want)
 		}
 	})
