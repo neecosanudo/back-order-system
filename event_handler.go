@@ -17,6 +17,19 @@ func (e *EventHandler) NewOrder() {
 	e.orders = append(e.orders, newOrder)
 }
 
+func (e *EventHandler) FindOrder(id uint) *Order {
+	var order *Order
+
+	for i, v := range e.orders {
+		if v.id == id {
+			order = &e.orders[i]
+			return order
+		}
+	}
+
+	return nil
+}
+
 func newEventHandler() *EventHandler {
 	return &EventHandler{}
 }
