@@ -78,7 +78,3 @@ func newEventHandler() *EventHandler {
 
 	return &eventHandler
 }
-
-func assertStageByOrderState(stages *[]Stage, orderState string) {
-
-}
