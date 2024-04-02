@@ -39,29 +39,32 @@ func (e *EventHandler) FindStage(name string) *Stage {
 }
 
 func (e *EventHandler) NewOrder() {
-	defaultState := ""
+	defaultState := "default"
 	e.counter++
 
 	newOrder := Order{e.counter, defaultState}
+	defaultStage := e.FindStage(defaultState)
 
 	e.orders = append(e.orders, newOrder)
+	defaultStage.container = append(defaultStage.container, newOrder)
+
 }
 
-func (e *EventHandler) FindOrder(id uint) *Order {
+func (e *EventHandler) FindOrder(id uint) (*Order, *Stage) {
 	var order *Order
 
 	for i, v := range e.orders {
 		if v.id == id {
 			order = &e.orders[i]
-			return order
+			return order, e.FindStage(order.state)
 		}
 	}
 
-	return nil
+	return nil, nil
 }
 
 func (e *EventHandler) UpdateOrder(id uint, newState string) *Order {
-	currentOrder := e.FindOrder(id)
+	currentOrder, _ := e.FindOrder(id)
 
 	currentOrder.state = newState
 
@@ -69,5 +72,13 @@ func (e *EventHandler) UpdateOrder(id uint, newState string) *Order {
 }
 
 func newEventHandler() *EventHandler {
-	return &EventHandler{}
+	var eventHandler EventHandler
+
+	eventHandler.NewStage("default")
+
+	return &eventHandler
+}
+
+func assertStageByOrderState(stages *[]Stage, orderState string) {
+
 }
