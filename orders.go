@@ -41,6 +41,11 @@ func (o *Orders) Get(id uint) *Ticket {
 
 func (o *Orders) UpdateStatus(id uint) *Ticket {
 	index := int(id) - 1
+
+	if o.orders[index].canceled {
+		return nil
+	}
+
 	o.orders[index].completed = !o.orders[index].completed
 
 	return &o.orders[index]

@@ -59,4 +59,16 @@ func TestOrders(t *testing.T) {
 			t.Errorf("order ticket is not cancelled. Got %+v, want %+v", got, want)
 		}
 	})
+
+	t.Run("a canceled order ticket shouldn't update its status", func(t *testing.T) {
+		ordersContainer := newOrderContainer()
+		ordersContainer.New()
+		ordersContainer.Cancel(1)
+
+		got := ordersContainer.UpdateStatus(1)
+
+		if got != nil {
+			t.Errorf("canceled order ticket was updated. got %+v", got)
+		}
+	})
 }
