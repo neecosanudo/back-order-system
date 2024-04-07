@@ -1,8 +1,13 @@
 package main
 
+import (
+	"errors"
+)
+
 type Stages struct {
 	containers []Container
 	counter    uint
+	sequence   []uint
 }
 
 type Container struct {
@@ -21,6 +26,7 @@ func (s *Stages) New(name string) *Container {
 		[]uint{},
 	}
 	s.containers = append(s.containers, container)
+	s.sequence = append(s.sequence, container.id)
 
 	return &container
 }
@@ -35,10 +41,25 @@ func (s *Stages) Get(id uint) *Container {
 	return nil
 }
 
+func (s *Stages) UpdateSequence(newSequence []uint) error {
+	if len(newSequence) != len(s.sequence) {
+		return errors.New("sequence slice should have equal length")
+	}
+
+	s.sequence = newSequence
+
+	return nil
+}
+
+func (s *Stages) GetSequence() []uint {
+	return s.sequence
+}
+
 // /
 func newStageContainer() *Stages {
 	return &Stages{
 		[]Container{},
 		0,
+		[]uint{},
 	}
 }

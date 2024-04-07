@@ -15,4 +15,19 @@ func TestStages(t *testing.T) {
 			t.Errorf("got %+v, want %+v", got, want)
 		}
 	})
+
+	t.Run("update sequence of stages", func(t *testing.T) {
+		stages := newStageContainer()
+		stages.New("first")
+		stages.New("second")
+		stages.New("third")
+
+		newSequence := []uint{1, 3, 2}
+
+		err := stages.UpdateSequence(newSequence)
+
+		if err != nil {
+			t.Errorf("sequence is not updated. Got error '%v', want nil", err)
+		}
+	})
 }
