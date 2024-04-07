@@ -8,6 +8,7 @@ type Orders struct {
 type Ticket struct {
 	id        uint
 	completed bool
+	canceled  bool
 }
 
 // /
@@ -15,10 +16,12 @@ func (o *Orders) New() *Ticket {
 	o.counter++
 
 	defaultStatus := false
+	defaultCanceledStatus := false
 
 	ticket := Ticket{
 		o.counter,
 		defaultStatus,
+		defaultCanceledStatus,
 	}
 
 	o.orders = append(o.orders, ticket)
@@ -41,6 +44,11 @@ func (o *Orders) UpdateStatus(id uint) *Ticket {
 	o.orders[index].completed = !o.orders[index].completed
 
 	return &o.orders[index]
+}
+
+func (o *Orders) Cancel(id uint) *Ticket {
+	o.Get(id).canceled = true
+	return o.Get(id)
 }
 
 // /
