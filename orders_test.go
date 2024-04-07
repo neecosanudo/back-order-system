@@ -3,9 +3,9 @@ package main
 import "testing"
 
 func TestOrders(t *testing.T) {
-	ordersContainer := newOrderContainer()
 
 	t.Run("create a new order ticket", func(t *testing.T) {
+		ordersContainer := newOrderContainer()
 		ordersContainer.New()
 
 		got := *ordersContainer.Get(1)
@@ -20,6 +20,7 @@ func TestOrders(t *testing.T) {
 	})
 
 	t.Run("send a not existing ID to get an order ticket", func(t *testing.T) {
+		ordersContainer := newOrderContainer()
 		ordersContainer.New()
 
 		got := ordersContainer.Get(47)
@@ -31,6 +32,7 @@ func TestOrders(t *testing.T) {
 	})
 
 	t.Run("update status order ticket", func(t *testing.T) {
+		ordersContainer := newOrderContainer()
 		ordersContainer.New()
 
 		ordersContainer.UpdateStatus(1)
@@ -45,10 +47,13 @@ func TestOrders(t *testing.T) {
 	})
 
 	t.Run("cancel an order ticket", func(t *testing.T) {
+		ordersContainer := newOrderContainer()
+		ordersContainer.New()
+
 		ordersContainer.Cancel(1)
 
 		got := *ordersContainer.Get(1)
-		want := Ticket{1, true, true}
+		want := Ticket{1, false, true}
 
 		if got != want {
 			t.Errorf("order ticket is not cancelled. Got %+v, want %+v", got, want)
