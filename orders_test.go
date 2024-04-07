@@ -71,4 +71,17 @@ func TestOrders(t *testing.T) {
 			t.Errorf("canceled order ticket was updated. got %+v", got)
 		}
 	})
+
+	t.Run("should not be cancel an order ticket if it is status completed", func(t *testing.T) {
+		ordersContainer := newOrderContainer()
+		ordersContainer.New()
+		ordersContainer.UpdateStatus(1)
+
+		got := ordersContainer.Cancel(1)
+
+		if got != nil {
+			t.Errorf("completed order ticket was canceled. got %+v", got)
+		}
+
+	})
 }

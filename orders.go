@@ -52,6 +52,10 @@ func (o *Orders) UpdateStatus(id uint) *Ticket {
 }
 
 func (o *Orders) Cancel(id uint) *Ticket {
+	if o.Get(id).completed {
+		return nil
+	}
+
 	o.Get(id).canceled = true
 	return o.Get(id)
 }
