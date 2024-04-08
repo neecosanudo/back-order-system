@@ -42,8 +42,13 @@ func TestStages(t *testing.T) {
 		containersLength := len(stages.containers)
 		sequenceLength := len(stages.sequence)
 
+		got := stages.Get(1)
+
 		if containersLength != sequenceLength {
-			t.Errorf("stage is not removed")
+			t.Errorf("stage is not removed from both slices: containers & sequence")
+		}
+		if got != nil {
+			t.Errorf("stages is not removed. Got %v, want nil", got)
 		}
 	})
 }
