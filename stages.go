@@ -73,6 +73,16 @@ func (s *Stages) GetSequence() []uint {
 }
 
 // /
+func (c *Container) Add(id uint) {
+	c.orders = append(c.orders, id)
+}
+
+func (c *Container) Remove(id uint) {
+	updatedOrders := removeOrderFromContainer(id, c.orders)
+	c.orders = append([]uint{}, updatedOrders...)
+}
+
+// /
 func newStageContainer() *Stages {
 	return &Stages{
 		[]Container{},
@@ -116,5 +126,27 @@ func removeStageFromSequence(id uint, sequence []uint) []uint {
 	default:
 		sequence = append(sequence[0:index], sequence[index+1:]...)
 		return sequence
+	}
+}
+
+func removeOrderFromContainer(id uint, container []uint) []uint {
+	var index int
+
+	for i, v := range container {
+		if v == id {
+			index = i
+		}
+	}
+
+	switch index {
+	case 0:
+		container = append([]uint{}, container[1:]...)
+		return container
+	case len(container) - 1:
+		container = append([]uint{}, container[:len(container)-1]...)
+		return container
+	default:
+		container = append(container[0:index], container[index+1:]...)
+		return container
 	}
 }

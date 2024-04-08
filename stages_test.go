@@ -51,4 +51,18 @@ func TestStages(t *testing.T) {
 			t.Errorf("stages is not removed. Got %v, want nil", got)
 		}
 	})
+
+	t.Run("remove an order ticket ID from a stage", func(t *testing.T) {
+		stage := newStageContainer().New("new")
+		stage.Add(1)
+		stage.Add(2)
+		stage.Add(3)
+
+		stage.Remove(1)
+
+		if len(stage.orders) != 2 {
+			t.Errorf("order ticket ID is not removed from stage: %v", stage)
+		}
+
+	})
 }
