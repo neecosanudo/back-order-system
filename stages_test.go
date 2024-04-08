@@ -30,4 +30,20 @@ func TestStages(t *testing.T) {
 			t.Errorf("sequence is not updated. Got error '%v', want nil", err)
 		}
 	})
+
+	t.Run("remove a stage", func(t *testing.T) {
+		stages := newStageContainer()
+		stages.New("first")
+		stages.New("second")
+		stages.New("third")
+
+		stages.Remove(1)
+
+		containersLength := len(stages.containers)
+		sequenceLength := len(stages.sequence)
+
+		if containersLength != sequenceLength {
+			t.Errorf("stage is not removed")
+		}
+	})
 }
