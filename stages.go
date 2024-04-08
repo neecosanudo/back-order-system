@@ -32,10 +32,10 @@ func (s *Stages) New(name string) *Container {
 }
 
 func (s *Stages) Get(id uint) *Container {
-	index := int(id) - 1
-
-	if len(s.containers) > index && index >= 0 {
-		return &s.containers[index]
+	for i, v := range s.containers {
+		if v.id == id {
+			return &s.containers[i]
+		}
 	}
 
 	return nil
