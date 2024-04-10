@@ -1,24 +1,24 @@
-package main
+package event
 
-type Orders struct {
+type orders struct {
 	counter uint
-	orders  []Ticket
+	orders  []ticket
 }
 
-type Ticket struct {
+type ticket struct {
 	id        uint
 	completed bool
 	canceled  bool
 }
 
 // /
-func (o *Orders) New() *Ticket {
+func (o *orders) new() *ticket {
 	o.counter++
 
 	defaultStatus := false
 	defaultCanceledStatus := false
 
-	ticket := Ticket{
+	ticket := ticket{
 		o.counter,
 		defaultStatus,
 		defaultCanceledStatus,
@@ -29,7 +29,7 @@ func (o *Orders) New() *Ticket {
 	return &ticket
 }
 
-func (o *Orders) Get(id uint) *Ticket {
+func (o *orders) get(id uint) *ticket {
 	index := int(id) - 1
 
 	if len(o.orders) > index && index >= 0 {
@@ -39,7 +39,7 @@ func (o *Orders) Get(id uint) *Ticket {
 	return nil
 }
 
-func (o *Orders) UpdateStatus(id uint) *Ticket {
+func (o *orders) updateStatus(id uint) *ticket {
 	index := int(id) - 1
 
 	if o.orders[index].canceled {
@@ -51,19 +51,19 @@ func (o *Orders) UpdateStatus(id uint) *Ticket {
 	return &o.orders[index]
 }
 
-func (o *Orders) Cancel(id uint) *Ticket {
-	if o.Get(id).completed {
+func (o *orders) cancel(id uint) *ticket {
+	if o.get(id).completed {
 		return nil
 	}
 
-	o.Get(id).canceled = true
-	return o.Get(id)
+	o.get(id).canceled = true
+	return o.get(id)
 }
 
 // /
-func newOrderContainer() *Orders {
-	return &Orders{
+func newOrderContainer() *orders {
+	return &orders{
 		0,
-		[]Ticket{},
+		[]ticket{},
 	}
 }

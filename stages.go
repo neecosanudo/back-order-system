@@ -1,26 +1,26 @@
-package main
+package event
 
 import (
 	"errors"
 )
 
-type Stages struct {
-	containers []Container
+type stages struct {
+	containers []container
 	counter    uint
 	sequence   []uint
 }
 
-type Container struct {
+type container struct {
 	id     uint
 	name   string
 	orders []uint
 }
 
 // /
-func (s *Stages) New(name string) *Container {
+func (s *stages) new(name string) *container {
 	s.counter++
 
-	container := Container{
+	container := container{
 		s.counter,
 		name,
 		[]uint{},
@@ -31,7 +31,7 @@ func (s *Stages) New(name string) *Container {
 	return &container
 }
 
-func (s *Stages) Get(id uint) *Container {
+func (s *stages) get(id uint) *container {
 	for i, v := range s.containers {
 		if v.id == id {
 			return &s.containers[i]
@@ -41,16 +41,16 @@ func (s *Stages) Get(id uint) *Container {
 	return nil
 }
 
-func (s *Stages) Remove(id uint) error {
+func (s *stages) remove(id uint) error {
 
-	stage := s.Get(id)
+	stage := s.get(id)
 
 	if stage == nil {
 		return errors.New("stage does not exist")
 	}
 
 	removedStage := removeStage(id, s.containers)
-	s.containers = append([]Container{}, removedStage...)
+	s.containers = append([]container{}, removedStage...)
 
 	newSequence := removeStageFromSequence(stage.id, s.sequence)
 	s.sequence = append([]uint{}, newSequence...)
@@ -58,7 +58,7 @@ func (s *Stages) Remove(id uint) error {
 	return nil
 }
 
-func (s *Stages) UpdateSequence(newSequence []uint) error {
+func (s *stages) updateSequence(newSequence []uint) error {
 	if len(newSequence) != len(s.sequence) {
 		return errors.New("sequence slice should have equal length")
 	}
@@ -68,38 +68,38 @@ func (s *Stages) UpdateSequence(newSequence []uint) error {
 	return nil
 }
 
-func (s *Stages) GetSequence() []uint {
+func (s *stages) getSequence() []uint {
 	return s.sequence
 }
 
 // /
-func (c *Container) Add(id uint) {
+func (c *container) add(id uint) {
 	c.orders = append(c.orders, id)
 }
 
-func (c *Container) Remove(id uint) {
+func (c *container) remove(id uint) {
 	updatedOrders := removeOrderFromContainer(id, c.orders)
 	c.orders = append([]uint{}, updatedOrders...)
 }
 
 // /
-func newStageContainer() *Stages {
-	return &Stages{
-		[]Container{},
+func newStageContainer() *stages {
+	return &stages{
+		[]container{},
 		0,
 		[]uint{},
 	}
 }
 
-func removeStage(id uint, stages []Container) []Container {
+func removeStage(id uint, stages []container) []container {
 	index := int(id) - 1
 
 	switch index {
 	case 0:
-		stages = append([]Container{}, stages[1:]...)
+		stages = append([]container{}, stages[1:]...)
 		return stages
 	case len(stages) - 1:
-		stages = append([]Container{}, stages[:len(stages)-1]...)
+		stages = append([]container{}, stages[:len(stages)-1]...)
 		return stages
 	default:
 		stages = append(stages[0:index], stages[index+1:]...)
