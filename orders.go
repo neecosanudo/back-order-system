@@ -6,16 +6,21 @@ type orders struct {
 }
 
 type ticket struct {
-	id        uint
+	id       uint
+	status   status
+	canceled bool
+}
+
+type status struct {
 	completed bool
-	canceled  bool
+	stage     uint
 }
 
 // /
 func (o *orders) new() *ticket {
 	o.counter++
 
-	defaultStatus := false
+	defaultStatus := status{false, 0}
 	defaultCanceledStatus := false
 
 	ticket := ticket{
@@ -46,13 +51,17 @@ func (o *orders) updateStatus(id uint) *ticket {
 		return nil
 	}
 
-	o.orders[index].completed = !o.orders[index].completed
+	o.orders[index].status.completed = !o.orders[index].status.completed
+
+	if o.orders[index].status.completed {
+		o.orders[index].status.stage = 0
+	}
 
 	return &o.orders[index]
 }
 
 func (o *orders) cancel(id uint) *ticket {
-	if o.get(id).completed {
+	if o.get(id).status.completed {
 		return nil
 	}
 

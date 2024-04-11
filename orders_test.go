@@ -9,7 +9,7 @@ func TestOrders(t *testing.T) {
 		ordersContainer.new()
 
 		got := *ordersContainer.get(1)
-		want := ticket{1, false, false}
+		want := ticket{1, status{false, 0}, false}
 
 		if len(ordersContainer.orders) != 1 {
 			t.Errorf("order ticket is not added at ticket container. Got %v", ordersContainer.orders)
@@ -38,7 +38,7 @@ func TestOrders(t *testing.T) {
 		ordersContainer.updateStatus(1)
 
 		got := *ordersContainer.get(1)
-		want := ticket{1, true, false}
+		want := ticket{1, status{true, 0}, false}
 
 		if got != want {
 			t.Errorf("got %v, want %v", got, want)
@@ -53,7 +53,7 @@ func TestOrders(t *testing.T) {
 		ordersContainer.cancel(1)
 
 		got := *ordersContainer.get(1)
-		want := ticket{1, false, true}
+		want := ticket{1, status{false, 0}, true}
 
 		if got != want {
 			t.Errorf("order ticket is not cancelled. Got %+v, want %+v", got, want)
