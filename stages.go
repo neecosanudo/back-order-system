@@ -18,13 +18,14 @@ type container struct {
 
 // /
 func (s *stages) new(name string) *container {
-	s.counter++
 
 	container := container{
 		s.counter,
 		name,
 		[]uint{},
 	}
+	s.counter++
+
 	s.containers = append(s.containers, container)
 	s.sequence = append(s.sequence, container.id)
 
@@ -84,22 +85,24 @@ func (c *container) remove(id uint) {
 
 // /
 func newStageContainer() *stages {
-	return &stages{
+	stages := &stages{
 		[]container{},
 		0,
 		[]uint{},
 	}
+
+	return stages
 }
 
 func removeStage(id uint, stages []container) []container {
-	index := int(id) - 1
+	index := int(id)
 
 	switch index {
 	case 0:
 		stages = append([]container{}, stages[1:]...)
 		return stages
-	case len(stages) - 1:
-		stages = append([]container{}, stages[:len(stages)-1]...)
+	case len(stages):
+		stages = append([]container{}, stages[:len(stages)]...)
 		return stages
 	default:
 		stages = append(stages[0:index], stages[index+1:]...)

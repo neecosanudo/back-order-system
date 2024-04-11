@@ -7,8 +7,12 @@ type event struct {
 
 // /
 func NewEvent() *event {
-	return &event{
+	event := &event{
 		*newStageContainer(),
 		*newOrderContainer(),
 	}
+
+	event.stages.new("tracked")
+
+	return event
 }

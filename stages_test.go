@@ -8,8 +8,8 @@ func TestStages(t *testing.T) {
 
 		stages.new("new")
 
-		got := stages.get(1)
-		want := container{1, "new", []uint{}}
+		got := stages.get(0)
+		want := container{0, "new", []uint{}}
 
 		if got.name != want.name {
 			t.Errorf("got %+v, want %+v", got, want)
@@ -37,12 +37,12 @@ func TestStages(t *testing.T) {
 		stages.new("second")
 		stages.new("third")
 
-		stages.remove(1)
+		stages.remove(3)
 
 		containersLength := len(stages.containers)
 		sequenceLength := len(stages.sequence)
 
-		got := stages.get(1)
+		got := stages.get(3)
 
 		if containersLength != sequenceLength {
 			t.Errorf("stage is not removed from both slices: containers & sequence")
