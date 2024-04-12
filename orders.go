@@ -60,6 +60,19 @@ func (o *orders) updateStatus(id uint) *ticket {
 	return &o.orders[index]
 }
 
+func (o *orders) updateStage(id uint, idStage uint) *ticket {
+	index := int(id) - 1
+
+	if o.orders[index].canceled || o.orders[index].status.completed {
+		return nil
+	}
+
+	o.orders[index].status.stage = idStage
+
+	return &o.orders[index]
+
+}
+
 func (o *orders) cancel(id uint) *ticket {
 	if o.get(id).status.completed {
 		return nil
